@@ -49,8 +49,11 @@ namespace WAVImporter
 				{
 					AudioData target = targetRef.Res;
 
-					// WAV loading code goes here
-//					target.OggVorbisData = File.ReadAllBytes(input.Path);
+					// Load as WAV
+					WAVVorbisLoader data = new WAVVorbisLoader(input.Path);
+
+					// Convert to Vorbis
+					target.OggVorbisData = data.WriteToVorbisData();
 
 					// Add the requested output to signal that we've done something with it
 					env.AddOutput(targetRef, input.Path);
@@ -73,8 +76,11 @@ namespace WAVImporter
 			AudioData input = env.Input as AudioData;
 			string outputPath = env.AddOutputPath(input.Name + SourceFileExtPrimary);
 
-			// WAV saving code goes here
-//			File.WriteAllBytes(outputPath, input.OggVorbisData);
+			// Convert to WAV
+			var data = new WAVVorbisLoader(input.OggVorbisData);
+
+			// Write to hard drive
+			data.SaveToFile(outputPath);
 		}
 
 		private bool AcceptsInput(AssetImportInput input)
