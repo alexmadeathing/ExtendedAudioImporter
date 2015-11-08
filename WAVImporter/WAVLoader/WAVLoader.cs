@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Duality.Audio;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace WAVImporter
 {
 	/// <summary>
-	/// WAV file format loader with limited Vorbis read/write capability
+	/// WAV file format loader
 	/// </summary>
 	internal class WAVLoader
 	{
@@ -19,7 +20,46 @@ namespace WAVImporter
 		protected short numChannels = 0;
 		protected int sampleRate = 0;
 		protected short bitDepth = 0;
+		protected int numSamples = 0;
 		protected byte[] audioData = null;
+
+		public int SampleRate
+		{
+			get { return this.sampleRate; }
+			private set { }
+		}
+
+		public AudioDataLayout DataLayout
+		{
+			get { return this.numChannels == 2 ? AudioDataLayout.LeftRight : AudioDataLayout.Mono; }
+			private set { }
+		}
+
+		public AudioDataElementType DataElementType
+		{
+			get
+			{
+				if (this.bitDepth == 8)
+				{
+					return AudioDataElementType.Byte;
+				}
+				else if (this.bitDepth == 16)
+				{
+					return AudioDataElementType.Short;
+				}
+				else
+				{
+					throw new WAVUnsupportedException("Duality supports audio bit depths: 8, 16 - Please use ConvertToDualityFormat() to prepare for import into Duality");
+				}
+			}
+			private set { }
+		}
+
+		public byte[] Data
+		{
+			get { return this.audioData; }
+			private set { }
+		}
 
 		protected WAVLoader()
 		{
@@ -69,6 +109,70 @@ namespace WAVImporter
 			// TODO Correct asset importer error reporting
 		}
 
+		public WAVLoader ConvertToDualityFormat()
+		{
+			// If these are the settings, then the buffer can be passed directly to Duality
+			bool validDataFormat = this.dataFormat == WAVE_FORMAT_PCM;
+			bool validBitDepth = this.bitDepth == 8 || this.bitDepth == 16;
+			bool validNumChannels = this.numChannels == 1 || this.numChannels == 2;
+			if (validBitDepth && validNumChannels)
+			{
+				return this;
+			}
+
+			// Otherwise, we have to convert :(
+			WAVLoader copy = new WAVLoader();
+			copy.dataFormat = WAVE_FORMAT_PCM;
+			copy.numChannels = this.numChannels;
+			copy.sampleRate = this.sampleRate;
+			copy.bitDepth = 16;
+			copy.numSamples = this.numSamples;
+
+			// EWWW... I just realised what I have to do
+			// Can anyone think of a better way to do this?
+
+			// Copy to intermediate array
+			short[] shortBuffer = new short[this.numSamples];
+			if (this.dataFormat == WAVE_FORMAT_IEEE_FLOAT)
+			{
+				float[] floatBuffer = new float[this.numSamples];
+				Buffer.BlockCopy(this.audioData, 0, floatBuffer, 0, this.audioData.Length);
+				for (int i = 0; i < this.numSamples; ++i)
+				{
+					shortBuffer[i] = (short)(floatBuffer[i] * short.MaxValue);
+				}
+			}
+			else if (this.bitDepth == 24) // Assume this.dataFormat == WAVE_FORMAT_PCM
+			{
+				double sampleScale24Bit = 1.0 / 0x7fffff;
+				for (int i = 0; i < numSamples; ++i)
+				{
+					int sampleVal = this.audioData[i * 3] + (this.audioData[i * 3 + 1] << 8) + (this.audioData[i * 3 + 2] << 16);
+					shortBuffer[i] = (short)(sampleVal * sampleScale24Bit * short.MaxValue);
+				}
+			}
+			else if (this.bitDepth == 32) // Assume this.dataFormat == WAVE_FORMAT_PCM
+			{
+				double sampleScale32Bit = 1.0 / int.MaxValue;
+				int[] intBuffer = new int[this.numSamples];
+				Buffer.BlockCopy(this.audioData, 0, intBuffer, 0, this.audioData.Length);
+				for (int i = 0; i < numSamples; ++i)
+				{
+					shortBuffer[i] = (short)(intBuffer[i] * sampleScale32Bit * short.MaxValue);
+				}
+			}
+			else
+			{
+				throw new WAVUnsupportedException("Cannot convert to Duality format");
+			}
+
+			int copyBytesPerSample = copy.bitDepth / 8;
+			copy.audioData = new byte[copyBytesPerSample * copy.numSamples];
+			Buffer.BlockCopy(shortBuffer, 0, copy.audioData, 0, copy.audioData.Length);
+
+			return copy;
+		}
+
 #region WAV Reading
 		private void ReadRIFFData(BinaryReader reader)
 		{
@@ -79,6 +183,10 @@ namespace WAVImporter
 			//        be skipped. I don't think WAV files ever contain more than
 			//        one chunk of each type; there's no linkage between chunks.
 			while(ReadRIFFChunk(reader));
+
+			// Wait for both format and data chunks
+			int bytesPerSample = this.bitDepth / 8;
+			this.numSamples = this.audioData.Length / bytesPerSample;
 		}
 
 		private void ReadRIFFHeaderChunk(BinaryReader reader)

@@ -36,11 +36,6 @@ namespace WAVImporter
 			// TODO Correct asset importer error reporting
 		}
 
-		public byte[] WriteToVorbisData()
-		{
-			return null;
-		}
-
 #region Vorbis Reading
 		private void ReadVorbisData(VorbisReader reader)
 		{
@@ -53,6 +48,7 @@ namespace WAVImporter
 			this.numChannels = (short)reader.Channels;
 			this.sampleRate = reader.SampleRate;
 			this.bitDepth = bitsPerSample;
+			this.numSamples = 0;
 
 			// TODO Handle exceptions
 			using (var stream = new MemoryStream())
@@ -64,6 +60,7 @@ namespace WAVImporter
 					int numRead = reader.ReadSamples(buffer, 0, buffer.Length);
 					while (numRead > 0)
 					{
+						this.numSamples += numRead;
 						// TODO Icky - Can we definitely not just cast the buffer?
 						Buffer.BlockCopy(buffer, 0, byteBuffer, 0, numRead * sizeof(float));
 						writer.Write(byteBuffer, 0, numRead * sizeof(float));
@@ -73,10 +70,6 @@ namespace WAVImporter
 				this.audioData = stream.ToArray();
 			}
 		}
-#endregion
-
-#region Vorbis Writing
-
 #endregion
 	}
 }

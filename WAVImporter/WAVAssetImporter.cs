@@ -50,10 +50,10 @@ namespace WAVImporter
 					AudioData target = targetRef.Res;
 
 					// Load as WAV
-					WAVVorbisLoader data = new WAVVorbisLoader(input.Path);
+					var data = (new WAVVorbisLoader(input.Path)).ConvertToDualityFormat();
 
-					// Convert to Vorbis
-					target.OggVorbisData = data.WriteToVorbisData();
+					// Push into Duality
+					target.Native.LoadData(data.SampleRate, data.Data, data.Data.Length, data.DataLayout, data.DataElementType);
 
 					// Add the requested output to signal that we've done something with it
 					env.AddOutput(targetRef, input.Path);
