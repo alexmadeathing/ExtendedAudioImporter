@@ -53,7 +53,7 @@ namespace WAVImporter
 					var data = (new WAVVorbisLoader(input.Path)).ConvertToDualityFormat();
 
 					// Push into Duality
-					target.Native.LoadData(data.SampleRate, data.Data, data.Data.Length, data.DataLayout, data.DataElementType);
+					target.Native.LoadData(data.SampleRate, data.Data, data.NumSamples, data.DataLayout, data.DataElementType);
 
 					// Add the requested output to signal that we've done something with it
 					env.AddOutput(targetRef, input.Path);

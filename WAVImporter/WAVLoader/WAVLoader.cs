@@ -61,6 +61,12 @@ namespace WAVImporter
 			private set { }
 		}
 
+		public int NumSamples
+		{
+			get { return this.numSamples; }
+			private set { }
+		}
+
 		protected WAVLoader()
 		{
 
@@ -203,12 +209,18 @@ namespace WAVImporter
 
 		private bool ReadRIFFChunk(BinaryReader reader)
 		{
-			int chunkID = reader.ReadInt32();
-			if (chunkID == 0)
+			int chunkID;
+			try
 			{
-				// If we fail to read at this point, it probably means we've read the whole file
+				chunkID = reader.ReadInt32();
+			}
+			catch (IOException)
+			{
+				// If we fail to read at this point, it most likely means we've read the whole file
+				// Any other time, we should definitely not swallow the exception
 				return false;
 			}
+
 			int chunkSize = reader.ReadInt32();
 
 			if (chunkID == LabelToInt32("fmt "))
