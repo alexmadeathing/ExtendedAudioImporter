@@ -5,20 +5,34 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace WAVImporter
+namespace ExtendedAudioImporter
 {
-	public class WAVAssetImporter : IAssetImporter
+	public class ExtendedAudioImporter : IAssetImporter
 	{
 		public static readonly string SourceFileExtPrimary = ".wav";
-		private static readonly string[] SourceFileExts = new[] { SourceFileExtPrimary };
+		private static readonly string[] SourceFileExts = new[]
+		{
+			// #NOTE - A select few formats are chosen here, only the most popular ones
+			// This can be extended at a later date to support more SoX loaders, but for now
+			// this will cover most bases. Note that ".ogg" could be included here since it is
+			// supported by SoX, but is currently handled by the default AudioData importer.
+			SourceFileExtPrimary,
+			".aiff",
+			".au",
+			".cdda",
+			".mp3",
+			".flac",
+			".pcm"
+			// ".ogg"
+		};
 
 		public string Id
 		{
-			get { return "WAVAudioDataAssetImporter"; }
+			get { return "ExtendedAudioImporter"; }
 		}
 		public string Name
 		{
-			get { return "WAV AudioData Importer"; }
+			get { return "Extended Audio Importer"; }
 		}
 		public int Priority
 		{

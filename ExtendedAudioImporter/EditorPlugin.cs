@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WAVImporter
+namespace ExtendedAudioImporter
 {
-    public class WAVImporterPlugin : EditorPlugin
+    public class ExtendedAudioImporterPlugin : EditorPlugin
     {
 		public override string Id
 		{
-			get { return "WAVAssetImporter"; }
+			get { return "ExtendedAudioImporterPlugin"; }
 		}
 	}
 }
