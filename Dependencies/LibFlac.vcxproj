@@ -107,6 +107,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -150,6 +151,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -196,8 +198,8 @@
     <ClCompile Include="libflac\src\libFLAC\stream_encoder.c" />
     <ClCompile Include="libflac\src\libFLAC\stream_encoder_framing.c" />
     <ClCompile Include="libflac\src\libFLAC\window.c" />
-  </ItemGroup>          
-  <ItemGroup>           
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="libflac\include\FLAC\all.h" />
     <ClInclude Include="libflac\include\FLAC\assert.h" />
     <ClInclude Include="libflac\include\FLAC\callback.h" />

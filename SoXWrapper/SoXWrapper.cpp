@@ -3,4 +3,5 @@
 #include "stdafx.h"
 
 #include "SoXWrapper.h"
+#include "sox.h"
 
