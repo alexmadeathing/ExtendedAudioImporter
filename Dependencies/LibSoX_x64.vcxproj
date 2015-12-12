@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F5A93130-8068-4E35-919C-0CBB380EB7D2}</ProjectGuid>
+    <RootNamespace>LibSoX</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>LibSoX_x64</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>SoX;libflac/include;libogg/include;libvorbis/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+      <DisableSpecificWarnings>4100;4125;4127;4295;4244;4706;4267;4701</DisableSpecificWarnings>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>SoX;libflac/include;libogg/include;libvorbis/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <ExceptionHandling>
+      </ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CallingConvention>Cdecl</CallingConvention>
+      <DisableSpecificWarnings>4100;4125;4127;4295;4244;4706;4267;4701</DisableSpecificWarnings>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="libsox\src\adpcm.h" />
+    <ClInclude Include="libsox\src\adpcms.h" />
+    <ClInclude Include="libsox\src\aiff.h" />
+    <ClInclude Include="libsox\src\amr.h" />
+    <ClInclude Include="libsox\src\band.h" />
+    <ClInclude Include="libsox\src\biquad.h" />
+    <ClInclude Include="libsox\src\compandt.h" />
+    <ClInclude Include="libsox\src\cvsd.h" />
+    <ClInclude Include="libsox\src\cvsdfilt.h" />
+    <ClInclude Include="libsox\src\dft_filter.h" />
+    <ClInclude Include="libsox\src\dither.h" />
+    <ClInclude Include="libsox\src\effects.h" />
+    <ClInclude Include="libsox\src\fft4g.h" />
+    <ClInclude Include="libsox\src\fifo.h" />
+    <ClInclude Include="libsox\src\formats.h" />
+    <ClInclude Include="libsox\src\g711.h" />
+    <ClInclude Include="libsox\src\g72x.h" />
+    <ClInclude Include="libsox\src\ignore-warning.h" />
+    <ClInclude Include="libsox\src\ima_rw.h" />
+    <ClInclude Include="libsox\src\mcompand_xover.h" />
+    <ClInclude Include="libsox\src\mp3-util.h" />
+    <ClInclude Include="libsox\src\noisered.h" />
+    <ClInclude Include="libsox\src\rate_filters.h" />
+    <ClInclude Include="libsox\src\rate_half_fir.h" />
+    <ClInclude Include="libsox\src\rate_poly_fir.h" />
+    <ClInclude Include="libsox\src\rate_poly_fir0.h" />
+    <ClInclude Include="libsox\src\raw.h" />
+    <ClInclude Include="libsox\src\sox.h" />
+    <ClInclude Include="libsox\src\sox_i.h" />
+    <ClInclude Include="libsox\src\sox_sample_test.h" />
+    <ClInclude Include="libsox\src\soxomp.h" />
+    <ClInclude Include="libsox\src\util.h" />
+    <ClInclude Include="libsox\src\vox.h" />
+    <ClInclude Include="libsox\src\win32-ltdl.h" />
+    <ClInclude Include="libsox\src\xmalloc.h" />
+    <ClInclude Include="SoX\soxconfig.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="libsox\src\8svx.c" />
+    <ClCompile Include="libsox\src\aifc-fmt.c" />
+    <ClCompile Include="libsox\src\aiff-fmt.c" />
+    <ClCompile Include="libsox\src\al-fmt.c" />
+    <ClCompile Include="libsox\src\amr-nb.c" />
+    <ClCompile Include="libsox\src\amr-wb.c" />
+    <ClCompile Include="libsox\src\au.c" />
+    <ClCompile Include="libsox\src\avr.c" />
+    <ClCompile Include="libsox\src\caf.c" />
+    <ClCompile Include="libsox\src\cdr.c" />
+    <ClCompile Include="libsox\src\cvsd-fmt.c" />
+    <ClCompile Include="libsox\src\dat.c" />
+    <ClCompile Include="libsox\src\dvms-fmt.c" />
+    <ClCompile Include="libsox\src\f4-fmt.c" />
+    <ClCompile Include="libsox\src\f8-fmt.c" />
+    <ClCompile Include="libsox\src\fap.c" />
+    <ClCompile Include="libsox\src\flac.c" />
+    <ClCompile Include="libsox\src\gsm.c" />
+    <ClCompile Include="libsox\src\gsrt.c" />
+    <ClCompile Include="libsox\src\hcom.c" />
+    <ClCompile Include="libsox\src\htk.c" />
+    <ClCompile Include="libsox\src\ima-fmt.c" />
+    <ClCompile Include="libsox\src\ima_rw.c" />
+    <ClCompile Include="libsox\src\la-fmt.c" />
+    <ClCompile Include="libsox\src\lpc10.c" />
+    <ClCompile Include="libsox\src\lu-fmt.c" />
+    <ClCompile Include="libsox\src\mat4.c" />
+    <ClCompile Include="libsox\src\mat5.c" />
+    <ClCompile Include="libsox\src\maud.c" />
+    <ClCompile Include="libsox\src\mp3.c" />
+    <ClCompile Include="libsox\src\nulfile.c" />
+    <ClCompile Include="libsox\src\paf.c" />
+    <ClCompile Include="libsox\src\prc.c" />
+    <ClCompile Include="libsox\src\pvf.c" />
+    <ClCompile Include="libsox\src\raw-fmt.c" />
+    <ClCompile Include="libsox\src\s1-fmt.c" />
+    <ClCompile Include="libsox\src\s2-fmt.c" />
+    <ClCompile Include="libsox\src\s3-fmt.c" />
+    <ClCompile Include="libsox\src\s4-fmt.c" />
+    <ClCompile Include="libsox\src\sd2.c" />
+    <ClCompile Include="libsox\src\sf.c" />
+    <ClCompile Include="libsox\src\smp.c" />
+    <ClCompile Include="libsox\src\sndfile.c" />
+    <ClCompile Include="libsox\src\sounder.c" />
+    <ClCompile Include="libsox\src\soundtool.c" />
+    <ClCompile Include="libsox\src\sox-fmt.c" />
+    <ClCompile Include="libsox\src\sphere.c" />
+    <ClCompile Include="libsox\src\tx16w.c" />
+    <ClCompile Include="libsox\src\u1-fmt.c" />
+    <ClCompile Include="libsox\src\u2-fmt.c" />
+    <ClCompile Include="libsox\src\u3-fmt.c" />
+    <ClCompile Include="libsox\src\u4-fmt.c" />
+    <ClCompile Include="libsox\src\ul-fmt.c" />
+    <ClCompile Include="libsox\src\voc.c" />
+    <ClCompile Include="libsox\src\vorbis.c" />
+    <ClCompile Include="libsox\src\vox-fmt.c" />
+    <ClCompile Include="libsox\src\vox.c" />
+    <ClCompile Include="libsox\src\w64.c" />
+    <ClCompile Include="libsox\src\wav.c" />
+    <ClCompile Include="libsox\src\waveaudio.c" />
+    <ClCompile Include="libsox\src\wavpack.c">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4142;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4142;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="libsox\src\wve.c" />
+    <ClCompile Include="libsox\src\xa.c" />
+    <ClCompile Include="libsox\src\xi.c" />
+    <ClCompile Include="libsox\src\adpcm.c" />
+    <ClCompile Include="libsox\src\adpcms.c" />
+    <ClCompile Include="libsox\src\aiff.c" />
+    <ClCompile Include="libsox\src\cvsd.c" />
+    <ClCompile Include="libsox\src\effects.c" />
+    <ClCompile Include="libsox\src\effects_i.c" />
+    <ClCompile Include="libsox\src\effects_i_dsp.c" />
+    <ClCompile Include="libsox\src\fft4g.c" />
+    <ClCompile Include="libsox\src\formats.c" />
+    <ClCompile Include="libsox\src\formats_i.c" />
+    <ClCompile Include="libsox\src\g711.c" />
+    <ClCompile Include="libsox\src\g721.c" />
+    <ClCompile Include="libsox\src\g723_24.c" />
+    <ClCompile Include="libsox\src\g723_40.c" />
+    <ClCompile Include="libsox\src\g72x.c" />
+    <ClCompile Include="libsox\src\getopt.c" />
+    <ClCompile Include="libsox\src\libsox.c" />
+    <ClCompile Include="libsox\src\libsox_i.c" />
+    <ClCompile Include="libsox\src\raw.c" />
+    <ClCompile Include="libsox\src\util.c" />
+    <ClCompile Include="libsox\src\win32-ltdl.c" />
+    <ClCompile Include="libsox\src\xmalloc.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="LibFlac_x64.vcxproj">
+      <Project>{c70c9297-aa18-49c2-9b7b-b5cee8b925d0}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="LibOgg_x64.vcxproj">
+      <Project>{e14373c3-0804-454a-b346-2ac1b68ea858}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <ProjectReference Include="LibVorbis_x64.vcxproj">
+      <Project>{1e60ac5a-bf13-40e0-bb46-ba1f5e721f44}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
