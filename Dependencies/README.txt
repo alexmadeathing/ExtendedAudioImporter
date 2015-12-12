@@ -1,4 +1,4 @@
-Four dependencies are required.
+Several dependencies are required:
 
 Please download libflac, libogg and libvorbis from:
 https://www.xiph.org/
@@ -12,3 +12,5 @@ libflac
 libogg
 libsox
 libvorbis
+
+Stripped down Visual Studio 2013 project files are included to compile the essentials (these were borrowed and adapted from libsox).
