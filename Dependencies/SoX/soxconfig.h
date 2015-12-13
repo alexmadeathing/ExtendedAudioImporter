@@ -61,8 +61,8 @@
 
 #define DL_LAME 1
 
-#define HAVE_LPC10 1
-#define STATIC_LPC10 1
+//#define HAVE_LPC10 1
+//#define STATIC_LPC10 1
 
 // #define HAVE_MAD_H 1
 // #define DL_MAD 1
@@ -83,8 +83,8 @@
 
 #define HAVE_SPEEXDSP 1
 
-#define HAVE_WAVEAUDIO 1
-#define STATIC_WAVEAUDIO 1
+//#define HAVE_WAVEAUDIO 1
+//#define STATIC_WAVEAUDIO 1
 
 // #define HAVE_WAVPACK 1
 // #define HAVE_WAVPACK_H 1
