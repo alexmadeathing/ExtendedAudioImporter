@@ -87,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Statics.cs" />
     <Compile Include="ExtendedAudioImporter.cs" />
+    <Compile Include="WAVExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

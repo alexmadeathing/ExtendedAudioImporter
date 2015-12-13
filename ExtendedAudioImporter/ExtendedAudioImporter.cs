@@ -132,11 +132,7 @@ namespace ExtendedAudioImporter
 			AudioData input = env.Input as AudioData;
 			string outputPath = env.AddOutputPath(input.Name + SourceFileExtPrimary);
 
-			// Convert to WAV
-			//			var data = new WAVVorbisLoader(input.OggVorbisData);
-
-			// Write to hard drive
-			//			data.SaveToFile(outputPath);
+			WAVExporter.SaveVorbisDataToWAV(input.OggVorbisData, outputPath);
 		}
 
 		private bool AcceptsInput(AssetImportInput input)
