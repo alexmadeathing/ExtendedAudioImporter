@@ -1,4 +1,5 @@
 libflac/
+libmad/
 libogg/
-libvorbis/
 libsox/
+libvorbis/

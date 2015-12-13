@@ -2,13 +2,9 @@
 
 #include "stdafx.h"
 #include <msclr\marshal_cppstd.h>
+#include <fstream>
 #include "SoXWrapper.h"
 #include "sox.h"
-
-struct SoXContextException { };
-struct SoXOpenReadFailed { };
-struct SoXOpenWriteFailed { };
-struct SoXWriteException { };
 
 class SoXContext
 {
@@ -17,17 +13,42 @@ public:
 	{
 		if (sox_init() != SOX_SUCCESS)
 		{
-			throw SoXContextException();
+			throw gcnew SoXWrapper::SoXContextException();
 		}
+
+		auto globals = sox_get_globals();
+		globals->output_message_handler = OnSoXMessage;
+
 	}
 	inline ~SoXContext() { sox_quit(); }
+
+private:
+	static void OnSoXMessage(
+		unsigned int level,   /**< 1 = FAIL, 2 = WARN, 3 = INFO, 4 = DEBUG, 5 = DEBUG_MORE, 6 = DEBUG_MOST. */
+		const char* filename, /**< Source code __FILENAME__ from which message originates. */
+		const char* format,   /**< Message format string. */
+		va_list args          /**< Message format parameters. */
+		)
+	{
+//		if (level == 1)
+		{
+			std::vector<char> buffer;
+			auto numChars = vsnprintf_s(nullptr, 0, 0, format, args);
+			if (numChars > 0)
+			{
+				buffer.resize(numChars + 1);
+				vsnprintf_s(&buffer[0], buffer.size(), numChars, format, args);
+				throw gcnew SoXWrapper::SoXIOException(gcnew String(buffer.data()));
+			}
+		}
+	}
 };
 
 class SoXFormat
 {
 public:
 	inline explicit SoXFormat(sox_format_t* format) : mFormat(format) { }
-	inline ~SoXFormat() { sox_close(mFormat); }
+	inline ~SoXFormat() { if (mFormat != nullptr) sox_close(mFormat); }
 
 	inline sox_format_t* operator ->() const { return mFormat; }
 	inline operator sox_format_t*() const { return mFormat; }
@@ -36,53 +57,54 @@ private:
 	sox_format_t* mFormat;
 };
 
-class SoXBuffer
-{
-public:
-	SoXBuffer() : mBuffer(nullptr), mBufferSize(0) { }
-	~SoXBuffer() { free(mBuffer); }
-
-	inline char*& GetBuffer() { return mBuffer; }
-	inline size_t& GetBufferSize() { return mBufferSize; }
-
-private:
-	char* mBuffer;
-	size_t mBufferSize;
-};
-
-array<char>^ SoXWrapper::SoXWrapper::LoadAudioAsVorbisStream(String^ path)
+array<Byte>^ SoXWrapper::SoXWrapper::LoadAudioAsVorbisStream(String^ path)
 {
 	try
 	{
 		SoXContext context;
-		return LoadAudioAsVorbisStreamInternal(msclr::interop::marshal_as<std::string>(path));
+
+		// SoX does not naturally support writing to a buffer in Windows (because it relies on open_memstream)
+		// We'll save to a temporary file instead
+		auto tempFilePath = GetTempFilePath();
+		WriteIntoTempFile(msclr::interop::marshal_as<std::string>(path), tempFilePath);
+		return LoadTempFile(tempFilePath);
 	}
-	catch (SoXContextException)
+	catch (SoXContextException^)
 	{
-		// Failed to open SoX
+		// Failed to open SoX - rethrow
+		throw;
 	}
-	catch (SoXOpenReadFailed)
+	catch (SoXIOException^)
 	{
-		// Failed to load audio file
-	}
-	catch (SoXOpenWriteFailed)
-	{
-		// Failed to load audio file
+		// Failed to read/write audio file - rethrow
+		throw;
 	}
 	catch (...)
 	{
 		// Unhandled exception
+		throw gcnew SoXUnhandledException();
 	}
 	return nullptr;
 }
 
-array<char>^ SoXWrapper::SoXWrapper::LoadAudioAsVorbisStreamInternal(std::string path)
+std::string SoXWrapper::SoXWrapper::GetTempFilePath()
 {
+	char tempString[L_tmpnam_s];
+	tmpnam_s(tempString, L_tmpnam_s);
+	return std::string(tempString);
+}
+
+void SoXWrapper::SoXWrapper::WriteIntoTempFile(std::string path, std::string tempPath)
+{
+	// SoX format detection seems a bit flaky (failing to load mp3)
+	// We'll give it a bit of a helping hand
+	std::string extension = path.substr(path.find_last_of(".") + 1);
+
 	// Open file for reading
-	SoXFormat inFile(sox_open_read(path.c_str(), nullptr, nullptr, nullptr));
+	SoXFormat inFile(sox_open_read(path.c_str(), nullptr, nullptr, extension.c_str()));
 	if (inFile == nullptr)
 	{
-		throw SoXOpenReadFailed();
+		throw gcnew SoXIOException(gcnew String((std::string("Failed to open file for reading: ") + path.c_str()).c_str()));
 	}
 
 	// Setup Vorbis encoding info
@@ -95,12 +117,11 @@ array<char>^ SoXWrapper::SoXWrapper::LoadAudioAsVorbisStreamInternal(std::string
 	vorbisEncoding.reverse_bits = sox_option_default;
 	vorbisEncoding.opposite_endian = sox_false;
 
-	// Open memory stream for writing
-	SoXBuffer buffer;
-	SoXFormat outFile(sox_open_memstream_write(&buffer.GetBuffer(), &buffer.GetBufferSize(), &inFile->signal, &vorbisEncoding, nullptr, nullptr));
+	// Open file for writing
+	SoXFormat outFile(sox_open_write(tempPath.c_str(), &inFile->signal, &vorbisEncoding, "ogg", nullptr, nullptr));
 	if (outFile == nullptr)
 	{
-		throw SoXOpenWriteFailed();
+		throw gcnew SoXIOException(gcnew String((std::string("Failed to open file for writing: ") + tempPath.c_str()).c_str()));
 	}
 
 	// Read all samples
@@ -111,14 +132,33 @@ array<char>^ SoXWrapper::SoXWrapper::LoadAudioAsVorbisStreamInternal(std::string
 	{
 		if (sox_write(outFile, samples, numRead) != numRead)
 		{
-			throw SoXWriteException();
+			throw gcnew SoXIOException(gcnew String((std::string("Failed to copy samples: ") + path.c_str()).c_str()));
 		}
 	}
+}
+
+array<Byte>^ SoXWrapper::SoXWrapper::LoadTempFile(std::string path)
+{
+	// Open temp file
+	std::ifstream inFile;
+	inFile.open(path.c_str(), std::ios::binary | std::ios::in);
+	if (!inFile.is_open())
+	{
+		throw gcnew SoXIOException(gcnew String((std::string("Failed to open file for reading: ") + path.c_str()).c_str()));
+	}
+
+	// Get file size
+	inFile.seekg(0, inFile.end);
+	auto fileSize = inFile.tellg();
+	inFile.seekg(0, inFile.beg);
+
+	// Allocate managed array
+	array<Byte>^ result = gcnew array<Byte>(static_cast<int>(fileSize));
+	pin_ptr<Byte> managedPtr = &result[0];
+	Byte* rawManagedData = managedPtr;
 
 	// Copy into managed array
-	array<char>^ result = gcnew array<char>(static_cast<int>(buffer.GetBufferSize()));
-	pin_ptr<char> managedPtr = &result[0];
-	char* rawManagedData = managedPtr;
-	std::copy(buffer.GetBuffer(), buffer.GetBuffer() + buffer.GetBufferSize(), rawManagedData);
+	inFile.read(reinterpret_cast<char*>(rawManagedData), fileSize);
+	inFile.close();
 	return result;
 }

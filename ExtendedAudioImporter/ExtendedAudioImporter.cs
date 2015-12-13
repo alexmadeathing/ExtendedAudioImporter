@@ -4,6 +4,8 @@ using Duality.Editor.AssetManagement;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using Duality.IO;
 
 namespace ExtendedAudioImporter
 {
@@ -16,13 +18,14 @@ namespace ExtendedAudioImporter
 			// This can be extended at a later date to support more SoX loaders, but for now
 			// this will cover most bases. Note that ".ogg" could be included here since it is
 			// supported by SoX, but is currently handled by the default AudioData importer.
-			SourceFileExtPrimary,
+			SourceFileExtPrimary, // ".wav"
+			".aif",
 			".aiff",
+			".aifc",
 			".au",
-			".cdda",
+			".mp2",
 			".mp3",
-			".flac",
-			".pcm"
+			".flac"
 			// ".ogg"
 		};
 
@@ -37,6 +40,43 @@ namespace ExtendedAudioImporter
 		public int Priority
 		{
 			get { return 0; }
+		}
+
+		private static MethodInfo LoadMethod;
+
+		static ExtendedAudioImporter()
+		{
+			// Load assembly
+			string nativeAssemblyName = Environment.Is64BitProcess ? "SoXWrapper_x64.dll" : "SoXWrapper_x86.dll";
+			string nativeAssemblyPath = PathOp.GetFullPath(PathOp.Combine(DualityApp.PluginDirectory, nativeAssemblyName));
+			Assembly nativeAssembly = Assembly.LoadFile(nativeAssemblyPath);
+			// #NOTE: Allow any "file missing" exceptions to propagate to Duality
+
+			// Find SoXWrapper class in assembly
+			Type wrapperClass = nativeAssembly.GetType("SoXWrapper.SoXWrapper");
+			if (wrapperClass == null)
+			{
+				throw new InvalidOperationException("Failed to find required class in assembly: " + nativeAssemblyPath);
+			}
+
+			// Find Load method in SoXWrapper class
+			LoadMethod = wrapperClass.GetMethod("LoadAudioAsVorbisStream");
+			if (LoadMethod == null)
+			{
+				throw new InvalidOperationException("Failed to find required method in assembly: " + nativeAssemblyPath);
+			}
+		}
+
+		private static byte[] InvokeLoadMethod(string path)
+		{
+ 			try
+ 			{
+				return LoadMethod.Invoke(null, new object[] { path }) as byte[];
+ 			}
+ 			catch (TargetInvocationException e)
+			{
+				throw e.InnerException;
+ 			}
 		}
 
 		public void PrepareImport(IAssetImportEnvironment env)
@@ -63,14 +103,16 @@ namespace ExtendedAudioImporter
 				{
 					AudioData target = targetRef.Res;
 
-					// Load as WAV
-					var data = (new WAVVorbisLoader(input.Path)).ConvertToDualityFormat();
+					// Load audio via SoX
+					var data = InvokeLoadMethod(input.Path);
+					if (data != null)
+					{
+						// Pass to AudioData target
+						target.OggVorbisData = data;
 
-					// Push into Duality
-					target.Native.LoadData(data.SampleRate, data.Data, data.NumSamples, data.DataLayout, data.DataElementType);
-
-					// Add the requested output to signal that we've done something with it
-					env.AddOutput(targetRef, input.Path);
+						// Add the requested output to signal that we've done something with it
+						env.AddOutput(targetRef, input.Path);
+					}
 				}
 			}
 		}
@@ -91,10 +133,10 @@ namespace ExtendedAudioImporter
 			string outputPath = env.AddOutputPath(input.Name + SourceFileExtPrimary);
 
 			// Convert to WAV
-			var data = new WAVVorbisLoader(input.OggVorbisData);
+			//			var data = new WAVVorbisLoader(input.OggVorbisData);
 
 			// Write to hard drive
-			data.SaveToFile(outputPath);
+			//			data.SaveToFile(outputPath);
 		}
 
 		private bool AcceptsInput(AssetImportInput input)

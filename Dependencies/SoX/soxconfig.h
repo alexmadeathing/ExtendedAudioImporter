@@ -57,14 +57,14 @@
 #define HAVE_GSM 1
 #define STATIC_GSM 1
 
-//#define HAVE_ID3TAG 1
+// #define HAVE_ID3TAG 1
 
-#define DL_LAME 1
+// #define DL_LAME 1
 
-//#define HAVE_LPC10 1
-//#define STATIC_LPC10 1
+// #define HAVE_LPC10 1
+// #define STATIC_LPC10 1
 
-// #define HAVE_MAD_H 1
+#define HAVE_MAD_H 1
 // #define DL_MAD 1
 
 #define HAVE_MP3 1
@@ -73,7 +73,7 @@
 #define HAVE_OGG_VORBIS 1
 #define STATIC_OGG_VORBIS 1
 
-//#define HAVE_PNG 1
+// #define HAVE_PNG 1
 
 // #define HAVE_SNDFILE 1
 // #define HAVE_SNDFILE_1_0_18 1
@@ -83,8 +83,8 @@
 
 #define HAVE_SPEEXDSP 1
 
-//#define HAVE_WAVEAUDIO 1
-//#define STATIC_WAVEAUDIO 1
+// #define HAVE_WAVEAUDIO 1
+// #define STATIC_WAVEAUDIO 1
 
 // #define HAVE_WAVPACK 1
 // #define HAVE_WAVPACK_H 1
