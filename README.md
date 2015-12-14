@@ -111,3 +111,6 @@ All projects produce static libraries and are linked into the SoXWrapper project
   * ExtendedAudioImporter.editor.dll
   * SoXWrapper_x86.dll
   * SoXWrapper_x64.dll
+
+### Other build environments...
+...are not currently supported. Contributions most welcome!
