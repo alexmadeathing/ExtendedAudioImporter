@@ -33,21 +33,19 @@ loaded, new formats will be exposed as and when they have been reasonably tested
 
 ## Installation
 
-Currently, DualityExtendedAudioImporter must be compiled manually by cloning this
-GitHub project and building in Visual Studio. A Duality NuGet package is in the works!
+DualityExtendedAudioImporter can be installed via Duality Editor's package management
+dialog, or by cloning this GitHub project and building in Visual Studio.
 
-### Via Duality Editor (Built in NuGet)
+### Via Duality Editor
 
-TODO
+![Duality Package Manager](https://cloud.githubusercontent.com/assets/12872500/11785448/d703c840-a279-11e5-9c67-0d180145c020.png)
 
-### Via NuGet
-
-TODO
+DualityExtendedAudioImporter can be installed via Duality Editor's built in package manager. Simply search for Duality Extended Audio Importer and press the Install/Update button.
 
 ### Manual Installation
 
 * Clone this repository: E.g. *git clone git@github.com:importjingles/DualityExtendedAudioImporter.git*
-* [Build the project](#BuildFromSource)
+* [Build the project](#building-dualityextendedaudioimporter-from-source)
 * Copy the following built files into *YourProject/Plugins/*:
   * ExtendedAudioImporter.editor.dll
   * SoXWrapper_x86.dll
@@ -63,7 +61,7 @@ Simply drag audio files into Duality:
 ![Drag and Drop into Duality](https://cloud.githubusercontent.com/assets/12872500/11782535/73115326-a269-11e5-9204-1f344868f07f.png)
 
 
-## <a name="BuildFromSource">Building DualityExtendedAudioImporter From Source</a>
+## Building DualityExtendedAudioImporter From Source
 
 ### Structure
 
@@ -113,3 +111,6 @@ All projects produce static libraries and are linked into the SoXWrapper project
   * ExtendedAudioImporter.editor.dll
   * SoXWrapper_x86.dll
   * SoXWrapper_x64.dll
+
+### Other build environments...
+...are not currently supported. Contributions most welcome!
