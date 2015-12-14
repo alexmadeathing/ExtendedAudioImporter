@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>importjingles.Duality.Editor.Plugins.DualityExtendedAudioImporter</id>
+        <version>1.0.1</version>
+        <title>Duality Extended Audio Importer</title>
+        <authors>Alice Blunt</authors>
+        <owners>Alice Blunt</owners>
+        <licenseUrl>https://github.com/importjingles/DualityExtendedAudioImporter/blob/master/LICENSE.md</licenseUrl>
+        <projectUrl>https://github.com/importjingles/DualityExtendedAudioImporter</projectUrl>
+        <iconUrl>https://cloud.githubusercontent.com/assets/12872500/11780392/866b5e2c-a259-11e5-9b4b-2e9acbf88c61.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Duality is a plugin based games development framework designed to be a minimal interface into which more specific or complex packages are "plugged in". Since Vorbis is used as Duality's primary audio compression mechanism, it has built in support for importing OGG Vorbis files. It does not provide any mechanism to load or save any other audio file formats.
+
+This project aims to extend the number of audio formats supported by implementing an editor plugin which fits into Duality's asset importing workflow. Simply drag new audio files into Duality's Project View.</description>
+        <summary>Extended audio file format support for Duality 2D Game Development Framework: http://duality.adamslair.net</summary>
+        <releaseNotes>Initial Release</releaseNotes>
+        <copyright />
+        <language>en-GB</language>
+        <tags>Duality Plugin Editor Audio</tags>
+        <dependencies>
+            <dependency id="AdamsLair.Duality" version="2.0.0" />
+            <dependency id="AdamsLair.Duality.Editor" version="2.0.0" />
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\bin\Release\ExtendedAudioImporter.editor.dll" target="lib\ExtendedAudioImporter.editor.dll" />
+        <file src="..\bin\Release\SoXWrapper_x64.dll" target="lib\SoXWrapper_x64.dll" />
+        <file src="..\bin\Release\SoXWrapper_x86.dll" target="lib\SoXWrapper_x86.dll" />
+    </files>
+</package>
