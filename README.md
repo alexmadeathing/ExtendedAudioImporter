@@ -38,9 +38,12 @@ dialog, or by cloning this GitHub project and building in Visual Studio.
 
 ### Via Duality Editor
 
-![Duality Package Manager](https://cloud.githubusercontent.com/assets/12872500/11785448/d703c840-a279-11e5-9c67-0d180145c020.png)
+![Duality Package Manager](https://cloud.githubusercontent.com/assets/12872500/11808036/b606f6ac-a315-11e5-9eac-59da84a87d7a.png)
 
-ExtendedAudioImporter can be installed via Duality Editor's built in package manager. Simply search for Duality Extended Audio Importer and press the Install/Update button.
+ExtendedAudioImporter can be installed via Duality Editor's built in package manager.
+* Change the package view to "Online Repository"
+* Search for "Extended Audio Importer"
+* Press the "Install" button
 
 ### Manual Installation
 
