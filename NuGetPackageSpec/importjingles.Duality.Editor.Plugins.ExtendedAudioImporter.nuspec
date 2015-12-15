@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>importjingles.Duality.Editor.Plugins.DualityExtendedAudioImporter</id>
-        <version>1.0.1</version>
-        <title>Duality Extended Audio Importer</title>
+        <version>1.0.2</version>
+        <title>Extended Audio Importer</title>
         <authors>Alice Blunt</authors>
         <owners>Alice Blunt</owners>
         <licenseUrl>https://github.com/importjingles/DualityExtendedAudioImporter/blob/master/LICENSE.md</licenseUrl>
